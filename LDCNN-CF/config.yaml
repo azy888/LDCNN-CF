@@ -1,0 +1,75 @@
+# LDCNN-CF Configuration File
+
+seed: 42
+
+# Data parameters
+data:
+  sample_rate: 22050
+  duration: 15
+  n_mels: 64
+  n_fft: 1024
+  hop_length: 512
+  psycho_features: ['loudness', 'sharpness', 'roughness', 'fluctuation_strength']
+
+# Dataset parameters
+dataset:
+  brands: ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8']
+  modes: ['M1', 'M2', 'M3']
+  scenarios: ['S1', 'S2', 'S3', 'S4', 'S5']
+  repetitions: 5
+  total_samples: 600
+
+# Cross-validation parameters
+cv:
+  n_folds: 8
+  val_ratio: 0.125
+
+# Data augmentation
+augmentation:
+  enabled: true
+  time_stretch:
+    min_rate: 0.95
+    max_rate: 1.05
+  noise:
+    snr_min: 25
+    snr_max: 30
+  spec_augment:
+    freq_mask: 10
+    time_mask: 10
+  pitch_shift:
+    min_semitones: -1
+    max_semitones: 1
+
+# Model parameters
+model:
+  name: "LDCNN-CF"
+  input_mel_shape: [64, 480]
+  input_psycho_shape: [4, 480]
+  conv_filters: [32, 64, 128, 256]
+  kernel_size: 3
+  num_heads: 4
+  head_dim: 64
+  dropout: 0.1
+
+# Training parameters
+training:
+  batch_size: 32
+  epochs: 200
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  early_stopping_patience: 20
+  lr_scheduler_patience: 10
+  lr_scheduler_factor: 0.5
+  min_lr: 0.000001
+
+# Evaluation metrics
+metrics:
+  - 'mae'
+  - 'rmse'
+  - 'mape'
+  - 'r2'
+
+# Statistical tests
+statistics:
+  bootstrap_iterations: 1000
+  confidence_level: 0.95
